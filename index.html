@@ -13,6 +13,9 @@
    		height: 624,
    		physics: {
    			default: 'arcade',
+   			arcade: {
+            	gravity: { y: 0 }
+            }
    		},
 
    		scene: {
@@ -25,6 +28,7 @@
 	
 	var block;
 	var obst;
+	var player;
 	var game = new Phaser.Game(config);
 	let posX=72;
 	let posY=24;
@@ -50,6 +54,8 @@
 		this.add.image(360,312,'field').setScale(3);
 		block = this.physics.add.staticGroup();
 		obst = this.physics.add.staticGroup();
+
+		cursors = this.input.keyboard.createCursorKeys();
 
 		//Create block on the border of the field
 		for (var i = 0; i < 28; i++) {
@@ -112,27 +118,95 @@
 						}
 					} else {
 						if ((i%2)===1) {
-						obst.create(posX ,posY ,'bush').setScale(3).refreshBody();
-						posX += 96;
-						j++;
-					} else {
-						obst.create(posX ,posY ,'bush').setScale(3).refreshBody();
-						posX += 48;
-					}
-				} 
+							obst.create(posX ,posY ,'bush').setScale(3).refreshBody();
+							posX += 96;
+							j++;
+						} else {
+							obst.create(posX ,posY ,'bush').setScale(3).refreshBody();
+							posX += 48;
+						}
+					} 
 			}
 			posY += 48;
 		}
+
+		//Spwan player
+
+		player1 = this.physics.add.sprite(72,72,'P1').setScale(3);
+		player2 = this.physics.add.sprite(72,552,'P2').setScale(3);
+		player3 = this.physics.add.sprite( 648,552,'P3').setScale(3);
+		player4 = this.physics.add.sprite(648,72,'P4').setScale(3);
+		player1.setCollideWorldBounds(true);
+		player2.setCollideWorldBounds(true);
+		player3.setCollideWorldBounds(true);
+		player4.setCollideWorldBounds(true);
+
+		this.anims.create({
+			key: 'right1',
+			frames: this.anims.generateFrameNumbers('P1', { start: 3, end: 6 }),
+       		frameRate: 10,
+       		repeat: -1
+		});
+		
+		this.anims.create({
+			key: 'left1',
+			frames: this.anims.generateFrameNumbers('P1', { start: 10, end: 13 }),
+       		frameRate: 10,
+       		repeat: -1
+		});
+
+		this.anims.create({
+			key: 'up1',
+			frames: this.anims.generateFrameNumbers('P1', { start: 7, end: 9 }),
+       		frameRate: 10,
+       		repeat: -1
+		});
+
+		this.anims.create({
+			key: 'down1',
+			frames: this.anims.generateFrameNumbers('P1', { start :0, end:2 }),
+       		frameRate: 10,
+       		repeat: -1
+		});
+
+		this.anims.create({
+        	key: 'turn1',
+        	frames: [ { key: 'P1', frame: 1 } ],
+        	frameRate: 20
+   		});
+
 
 
 	}
 	
 	function update(){
 
-	}
+		if (cursors.left.isDown){
+       		player1.setVelocityX(-160);
+       		player1.setVelocityY(0);
+        	player1.anims.play('left1', true);
+    	}	else if (cursors.right.isDown) {
+       		player1.setVelocityX(160);
+       		player1.setVelocityY(0);
+        	player1.anims.play('right1', true);
+    	}	else if (cursors.up.isDown){
+    		player1.setVelocityX(0);
+    		player1.setVelocityY(-160);
+        	player1.anims.play('up1', true);
+    	} 	else if (cursors.down.isDown){
+    		player1.setVelocityY(160);
+    		player1.setVelocityX(0);
+        	player1.anims.play('down1', true);
+    	} else {
+			player1.setVelocityX(0);
+			player1.setVelocityY(0);
+			player1.anims.play('turn1');
+    	}
+
+    }
 
 
-	</script>
+</script>
 
 </body>
 </html>
