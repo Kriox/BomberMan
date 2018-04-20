@@ -5,29 +5,36 @@
 	<script src="//cdn.jsdelivr.net/npm/phaser@3.1.1/dist/phaser.js"></script>
 </head>
 <body>
-	<h1>BOMBERMAN</h1>
 	<script type="text/javascript">
 
 	var config = {
 		type: Phaser.AUTO,
-   		width: 800,
-   		height: 600,
+   		width: 720,
+   		height: 624,
+   		physics: {
+   			default: 'arcade',
+   		},
 
    		scene: {
-        preload: preload,
-        create: create,
-        update: update
+       		preload: preload,
+        	create: create,
+        	update: update
     	}
 	};
 
-	var game = new Phaser.game(config);
+	
 	var block;
+	var obst;
+	var game = new Phaser.Game(config);
+	let posX=72;
+	let posY=24;
+	let flp= true;
 
 	function preload(){
 		this.load.image('field', '/assets/campo.png');
 		this.load.image('bush', '/assets/bush.png');
 		this.load.image('border', '/assets/borderBlock.png');
-		this.load.image('mBlock', '/assets/mainBlock.png');
+		this.load.image('mblock', '/assets/mainBlock.png');
 		this.load.spritesheet('P1', '/assets/player1.png', {spacing:1, frameWidth: 15, frameHeight: 16 });
 		this.load.spritesheet('P2', '/assets/player2.png', {spacing:1, frameWidth: 15, frameHeight: 16 });
 		this.load.spritesheet('P3', '/assets/player3.png', {spacing:1, frameWidth: 15, frameHeight: 16 });
@@ -40,10 +47,82 @@
 
 	function create(){
 
-		this.add.image(400,300,'field')
+		this.add.image(360,312,'field').setScale(3);
 		block = this.physics.add.staticGroup();
+		obst = this.physics.add.staticGroup();
 
-		block.create('mblock')
+		//Create block on the border of the field
+		for (var i = 0; i < 28; i++) {
+			block.create(posX ,posY ,'mblock').setScale(3).refreshBody();
+			posX += 48;
+			if (i===12) {
+				posX=24;
+				posY=600;
+			}
+		}
+		
+		posX=24;
+		posY=24;
+		for (var i = 0; i < 24; i++) {
+			block.create(posX ,posY ,'border').setScale(3).refreshBody();
+			posY += 48;
+			if (i===11) {
+				posX=696;
+				posY=24;
+			}
+		}
+
+
+		//Create the middle block of the field
+		posX=120;
+		posY=120;
+		for (var i = 0; i < 5; i++) {
+			for (var j = 0; j < 6 ; j++){
+				block.create(posX ,posY ,'mblock').setScale(3).refreshBody();
+					posX += 96;
+				}
+			posX = 120;
+			posY += 96;
+		}
+
+
+		//Spawn the breakable bushes obstacle in the field
+		posY=72;
+		for (var i = 0; i<11 ; i++){
+			if (i===0 || i===10 || i===9 || i===1 ){
+				flp =true;
+				posX = 168;
+			} else {
+				flp =false;
+				posX=72;
+			}
+			for (var j = 0; j<13 ; j++){
+					if(flp){	
+						j += 2;
+						if (j<11){
+							if ((i%2)===1) {
+								obst.create(posX ,posY ,'bush').setScale(3).refreshBody();
+								posX += 96;
+								j--;
+							} else {
+								obst.create(posX ,posY ,'bush').setScale(3).refreshBody();
+								posX += 48;
+								j -= 2;
+							}	
+						}
+					} else {
+						if ((i%2)===1) {
+						obst.create(posX ,posY ,'bush').setScale(3).refreshBody();
+						posX += 96;
+						j++;
+					} else {
+						obst.create(posX ,posY ,'bush').setScale(3).refreshBody();
+						posX += 48;
+					}
+				} 
+			}
+			posY += 48;
+		}
 
 
 	}
@@ -54,7 +133,6 @@
 
 
 	</script>
-
 
 </body>
 </html>
