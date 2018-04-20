@@ -14,7 +14,8 @@
    		physics: {
    			default: 'arcade',
    			arcade: {
-            	gravity: { y: 0 }
+            	gravity: { y: 0 },
+            	debug:false
             }
    		},
 
@@ -140,7 +141,10 @@
 		player2.setCollideWorldBounds(true);
 		player3.setCollideWorldBounds(true);
 		player4.setCollideWorldBounds(true);
-
+		this.physics.add.collider(player1, obst);
+		this.physics.add.collider(player1, block);
+		player1.body.setSize(14,14);
+		player1.body.setOffset(-5,-5);
 		this.anims.create({
 			key: 'right1',
 			frames: this.anims.generateFrameNumbers('P1', { start: 3, end: 6 }),
@@ -203,8 +207,11 @@
 			player1.anims.play('turn1');
     	}
 
-    }
+    	if (cursors.space.isDown){
+    		this.add.sprite(player1.x, player1.y,'bomb')
+    	}
 
+    }
 
 </script>
 
