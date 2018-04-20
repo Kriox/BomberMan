@@ -21,21 +21,30 @@
 	};
 
 	var game = new Phaser.game(config);
+	var block;
 
 	function preload(){
 		this.load.image('field', '/assets/campo.png');
 		this.load.image('bush', '/assets/bush.png');
+		this.load.image('border', '/assets/borderBlock.png');
+		this.load.image('mBlock', '/assets/mainBlock.png');
 		this.load.spritesheet('P1', '/assets/player1.png', {spacing:1, frameWidth: 15, frameHeight: 16 });
 		this.load.spritesheet('P2', '/assets/player2.png', {spacing:1, frameWidth: 15, frameHeight: 16 });
 		this.load.spritesheet('P3', '/assets/player3.png', {spacing:1, frameWidth: 15, frameHeight: 16 });
 		this.load.spritesheet('P4', '/assets/player4.png', {spacing:1, frameWidth: 15, frameHeight: 16 });
 		this.load.spritesheet('fireX', '/assets/fireX.png', {spacing:1, frameWidth: 16, frameHeight: 16 });
 		this.load.spritesheet('fireY', '/assets/fireY.png', {spacing:1, frameWidth: 16, frameHeight: 16 });
-		this.load.spritesheet('bomb', '/assets/bomb.png', { frameWidth: 32, frameHeight: 48 });
+		this.load.spritesheet('bomb', '/assets/bomb.png', {spacing:1, frameWidth: 16, frameHeight: 16 });
 
 	}
 
 	function create(){
+
+		this.add.image(400,300,'field')
+		block = this.physics.add.staticGroup();
+
+		block.create('mblock')
+
 
 	}
 	
